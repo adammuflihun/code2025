@@ -3,13 +3,14 @@ const videoObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         const video = entry.target;
         
-        if (entry.isIntersecting) {
-            // Play video when it enters viewport
+        // Only play if video hasn't been played before
+        if (entry.isIntersecting && !video.hasPlayed) {
             if (video.readyState >= 2) {
                 video.playbackRate = 2.0;  // Set 2x speed
                 video.play().catch(e => {
                     // console.log("Playback failed:", e);
                 });
+                video.hasPlayed = true;  // Mark as played
             } else {
                 // Add event listener for when video can play
                 video.addEventListener('canplay', () => {
@@ -17,12 +18,13 @@ const videoObserver = new IntersectionObserver((entries) => {
                     video.play().catch(e => {
                         // console.log("Playback failed:", e);
                     });
+                    video.hasPlayed = true;  // Mark as played
                 }, { once: true });
             }
-        } else {
-            // When video leaves viewport, pause and reset
+        } else if (!entry.isIntersecting) {
+            // When video leaves viewport, just pause it
             video.pause();
-            video.currentTime = 0;
+            // Removed the currentTime reset to keep video position
         }
     });
 }, {
@@ -31,7 +33,8 @@ const videoObserver = new IntersectionObserver((entries) => {
 
 // Get all video elements and observe them
 document.querySelectorAll('.videoitem').forEach(video => {
-    // Remove the ended event listener that was resetting the video
+    // Initialize hasPlayed flag
+    video.hasPlayed = false;
     
     // Force reload the video source to ensure it's fresh
     const currentSrc = video.querySelector('source').src;
