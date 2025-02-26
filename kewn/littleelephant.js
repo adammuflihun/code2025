@@ -6,12 +6,14 @@ const videoObserver = new IntersectionObserver((entries) => {
         if (entry.isIntersecting) {
             // Play video when it enters viewport
             if (video.readyState >= 2) {
+                video.playbackRate = 2.0;  // Set 2x speed
                 video.play().catch(e => {
                     // console.log("Playback failed:", e);
                 });
             } else {
                 // Add event listener for when video can play
                 video.addEventListener('canplay', () => {
+                    video.playbackRate = 2.0;  // Set 2x speed
                     video.play().catch(e => {
                         // console.log("Playback failed:", e);
                     });
