@@ -6,5 +6,7 @@ gsap.to(".element", {
     rotation: 360, // 360 degrees
     scale: 2, // 2x
     ease: "power2.inOut" // ease in and out
+//anjay
+
 
 });
