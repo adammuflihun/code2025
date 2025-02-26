@@ -1,4 +1,5 @@
 // Create an Intersection Observer to detect when videos are in view
+console.log("anjay waginjay");
 const videoObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         const video = entry.target;
